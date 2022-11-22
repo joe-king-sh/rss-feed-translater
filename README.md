@@ -19,9 +19,9 @@ AWSから英語で提供されているRSSをAmazon Translateで日本語化し�
 ### 1.パラメーターストアの設定
 デプロイ前に以下をパラメーターストアに登録する必要があります
   - `/RSS_FEED_TRANSLATER/SLACK_INCOMING_WEBHOOK-URL-BLOGS`
-    - AWS Blogsの通知先となるSlacのWebhookURL
+    - AWS Blogsの通知先となるSlackのWebhookURL
   - `/RSS_FEED_TRANSLATER/SLACK_INCOMING-WEBHOOK-URL-ANNOUNCEMENTS`
-    - What's New の通知先となるSlacのWebhookURL
+    - What's New の通知先となるSlackのWebhookURL
   - `/RSS_FEED_TRANSLATER/LAST_RETREIVED_THRESHOLD_MINUTE`
     - Lambda実行時刻と比較し、ここで指定した分数過去分の記事を収集する
     - ※このパラメーターはしばらく様子見て後から消す
