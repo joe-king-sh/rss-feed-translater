@@ -5,6 +5,11 @@ export const feeds = [
     type: "blogs",
   },
   {
+    title: "AWS Database Blog",
+    url: "https://aws.amazon.com/blogs/database/feed",
+    type: "blogs",
+  },
+  {
     title: "AWS Architecture Blog",
     url: "https://aws.amazon.com/blogs/architecture/feed",
     type: "blogs",
@@ -42,11 +47,6 @@ export const feeds = [
   {
     title: "Containers",
     url: "https://aws.amazon.com/blogs/containers/feed",
-    type: "blogs",
-  },
-  {
-    title: "AWS Database Blog",
-    url: "https://aws.amazon.com/blogs/database/feed",
     type: "blogs",
   },
   {
