@@ -1,9 +1,10 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+import * as events from "aws-cdk-lib/aws-events";
+import * as targets from "aws-cdk-lib/aws-events-targets";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-
 import { Construct } from "constructs";
 
 export class RssFeedTranslaterStack extends Stack {
@@ -51,5 +52,14 @@ export class RssFeedTranslaterStack extends Stack {
         ],
       })
     );
+
+    new events.Rule(this, "sampleRule", {
+      schedule: events.Schedule.cron({ minute: "*/20" }),
+      targets: [
+        new targets.LambdaFunction(rssFeedTranslaterLambda, {
+          retryAttempts: 3,
+        }),
+      ],
+    });
   }
 }

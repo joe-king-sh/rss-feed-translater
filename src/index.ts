@@ -72,4 +72,7 @@ export const handler = async () => {
   return 0;
 };
 
-handler();
+// For local test.
+if (require.main === module) {
+  handler();
+}
