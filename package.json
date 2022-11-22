@@ -1,0 +1,35 @@
+{
+  "name": "rss-feed-translater",
+  "version": "0.1.0",
+  "bin": {
+    "rss-feed-translater": "bin/rss-feed-translater.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/he": "^1.1.2",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^18.11.9",
+    "@types/prettier": "2.6.0",
+    "aws-cdk": "2.51.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-sdk/client-translate": "^3.215.0",
+    "aws-cdk-lib": "2.51.1",
+    "constructs": "^10.0.0",
+    "dayjs": "^1.11.6",
+    "fast-xml-parser": "^4.0.12",
+    "he": "^1.2.0",
+    "rss-parser": "^3.12.0"
+  },
+  "volta": {
+    "node": "18.12.1"
+  }
+}
