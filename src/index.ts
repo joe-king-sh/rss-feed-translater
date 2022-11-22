@@ -17,6 +17,7 @@ export const handler = async () => {
     WEBHOOK_URL_BLOGS,
     WEBHOOK_URL_ANNOUNCEMENTS,
     LAST_RETREIVED_THRESHOLD_MINUTE,
+    DRY_RUN,
   } = getEnv();
   const nowDate = dayjs();
 
@@ -49,11 +50,18 @@ export const handler = async () => {
         items,
       });
 
-      await notify({
-        url:
-          feed.type === "blogs" ? WEBHOOK_URL_BLOGS : WEBHOOK_URL_ANNOUNCEMENTS,
-        body,
-      });
+      if (!DRY_RUN) {
+        await notify({
+          url:
+            feed.type === "blogs"
+              ? WEBHOOK_URL_BLOGS
+              : WEBHOOK_URL_ANNOUNCEMENTS,
+          body,
+        });
+      } else {
+        console.info("DRY_RUN is true. Skip notification.");
+        console.info({ ...body });
+      }
     }
   }
 

@@ -39,9 +39,6 @@ export const notify = async (options: {
   url: string;
   body: WebHookMessageBody;
 }) => {
-  console.log(options);
-  console.log(options.body.blocks);
-
   const response = await fetch(options.url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
