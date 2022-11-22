@@ -6,9 +6,9 @@ export const getEnv = () => {
     DRY_RUN,
   } = process.env;
   if (!SLACK_INCOMING_WEBHOOK_URL_BLOGS)
-    throw new Error("WEBHOOK_URL_BLOGS is not set");
+    throw new Error("SLACK_INCOMING_WEBHOOK_URL_BLOGS is not set");
   if (!SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS)
-    throw new Error("WEBHOOK_URL_ANNOUNCEMENTS is not set");
+    throw new Error("SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS is not set");
 
   return {
     SLACK_INCOMING_WEBHOOK_URL_BLOGS,
