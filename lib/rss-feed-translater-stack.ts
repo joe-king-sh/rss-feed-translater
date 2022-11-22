@@ -1,9 +1,6 @@
-import {
-  //  Duration,
-  Stack,
-  StackProps,
-} from "aws-cdk-lib";
+import { Duration, Stack, StackProps } from "aws-cdk-lib";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 
@@ -39,7 +36,20 @@ export class RssFeedTranslaterStack extends Stack {
         },
         functionName: "RssFeedTranslater",
         description: "AWSのRSS情報を読み取り日本語化してSlackに通知する",
+        timeout: Duration.seconds(900),
+        memorySize: 1024,
       }
+    );
+
+    rssFeedTranslaterLambda.role?.attachInlinePolicy(
+      new iam.Policy(this, "translateText-policy", {
+        statements: [
+          new iam.PolicyStatement({
+            actions: ["translate:TranslateText"],
+            resources: ["arn:aws:translate:*:*:terminology/*"],
+          }),
+        ],
+      })
     );
   }
 }
