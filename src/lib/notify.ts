@@ -8,7 +8,7 @@ type WebHookMessageBody = {
 
 type BuildMessageBodyOptions = {
   source: string;
-  items: Array<{
+  posts: Array<{
     link: string;
     title: string;
     description: string;
@@ -17,14 +17,14 @@ type BuildMessageBodyOptions = {
 type BuildMessageBodyResponse = WebHookMessageBody;
 export const buildMessageBody = ({
   source,
-  items,
+  posts,
 }: BuildMessageBodyOptions): BuildMessageBodyResponse => ({
   text: source,
-  blocks: items.map((item) => ({
+  blocks: posts.map((post) => ({
     type: "section",
     text: {
       type: "mrkdwn",
-      text: `<${item.link}|${item.title}> \n ${item.description.replace(
+      text: `<${post.link}|${post.title}> \n ${post.description.replace(
         /(<([^>]+)>)/gi,
         ""
       )}`,
@@ -39,6 +39,8 @@ export const notify = async (options: {
   url: string;
   body: WebHookMessageBody;
 }) => {
+  console.info(JSON.stringify(options.body));
+
   const response = await fetch(options.url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
