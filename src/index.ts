@@ -1,5 +1,5 @@
-import * as Parser from "rss-parser";
-import * as dayjs from "dayjs";
+import Parser from "rss-parser";
+import dayjs from "dayjs";
 import { isNewItem, isValidItem } from "./lib/validate";
 import { buildMessageBody, notify } from "./lib/notify";
 import { translate } from "./lib/translate";
