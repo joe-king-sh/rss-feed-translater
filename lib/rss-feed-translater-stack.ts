@@ -47,7 +47,7 @@ export class RssFeedTranslaterStack extends Stack {
         statements: [
           new iam.PolicyStatement({
             actions: ["translate:TranslateText"],
-            resources: ["arn:aws:translate:*:*:terminology/*"],
+            resources: ["*"],
           }),
         ],
       })

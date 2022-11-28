@@ -34,7 +34,11 @@ export const handler = async () => {
               isNewItem({
                 pubDate: dayjs(item.pubDate),
                 nowDate,
-                lastRetrievedThresholdMinute: LAST_RETREIVED_THRESHOLD_MINUTE,
+                lastRetrievedThresholdMinute:
+                  feed.type == "announcements"
+                    ? // what's newのRSSのpubDateに過去日が挿入されてきて拾えない問題があるので閾値を広くする
+                      LAST_RETREIVED_THRESHOLD_MINUTE + 30
+                    : LAST_RETREIVED_THRESHOLD_MINUTE,
               })
           )
           .map(async (item) => ({
