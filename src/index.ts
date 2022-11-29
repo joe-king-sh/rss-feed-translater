@@ -28,8 +28,12 @@ export const handler = async () => {
       const posts = await parser.parseURL(feed.url);
       const newPosts = await Promise.all(
         posts.items
-          .filter(
-            (item) =>
+          .filter((item) => {
+            if (feed.type === "announcements") {
+              console.log("this post is from announcements");
+              console.log({ item });
+            }
+            return (
               isValidItem(item) &&
               isNewItem({
                 pubDate: dayjs(item.pubDate),
@@ -37,10 +41,11 @@ export const handler = async () => {
                 lastRetrievedThresholdMinute:
                   feed.type == "announcements"
                     ? // what's newのRSSのpubDateに過去日が挿入されてきて拾えない問題があるので閾値を広くする
-                      LAST_RETREIVED_THRESHOLD_MINUTE + 30
+                      240
                     : LAST_RETREIVED_THRESHOLD_MINUTE,
               })
-          )
+            );
+          })
           .map(async (item) => ({
             feed: feed.title!,
             title: (await translate(item.title!))!,
