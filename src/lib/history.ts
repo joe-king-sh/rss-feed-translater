@@ -9,7 +9,6 @@ import {
 
 const client = new DynamoDBClient({
   region: "ap-northeast-1",
-  endpoint: "https://dynamodb.ap-northeast-1.amazonaws.com",
 });
 const ddbClient = DynamoDBDocumentClient.from(client);
 
@@ -31,11 +30,12 @@ export const fetchHistoryByTitle = async (title: string) => {
 };
 
 type PutHistoryInput = {
-  title: string;
-  link: string;
-  description: string;
-  publishedAt: string;
-  notifiedAt: string;
+  Title: string;
+  Type: string;
+  Link: string;
+  Description: string;
+  PublishedAt: string;
+  NotifiedAt: string;
 };
 
 export const putHistory = async (item: PutHistoryInput) => {

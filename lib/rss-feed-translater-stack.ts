@@ -64,7 +64,7 @@ export class RssFeedTranslaterStack extends Stack {
       ],
     });
 
-    new dynamodb.Table(scope, `notificationHistory`, {
+    new dynamodb.Table(this, `notificationHistory`, {
       partitionKey: {
         name: "Title",
         type: dynamodb.AttributeType.STRING,

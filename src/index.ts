@@ -1,5 +1,5 @@
 import Parser from "rss-parser";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { isNewItem, isValidItem } from "./lib/validate";
 import { buildMessageBody, notify } from "./lib/notify";
 import { translate } from "./lib/translate";
@@ -17,7 +17,6 @@ export const handler = async () => {
   const {
     SLACK_INCOMING_WEBHOOK_URL_BLOGS,
     SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS,
-    LAST_RETREIVED_THRESHOLD_MINUTE,
     DRY_RUN,
   } = getEnv();
 
@@ -26,27 +25,24 @@ export const handler = async () => {
       console.info(`Now processing ${feed.title}...`);
 
       const posts = await parser.parseURL(feed.url);
+      const bitsForFilter = await Promise.all(
+        posts.items.map(
+          async (item) =>
+            isValidItem(item) &&
+            (await isNewItem({
+              title: item.title!,
+            }))
+        )
+      );
+      const filteredPosts = posts.items.filter(() => bitsForFilter.shift());
       const newPosts = await Promise.all(
-        posts.items
-          .filter((item) => {
-            if (feed.type === "announcements") {
-              console.log("this post is from announcements");
-              console.log({ item });
-            }
-            return (
-              isValidItem(item) &&
-              isNewItem({
-                title: item.title!,
-              })
-            );
-          })
-          .map(async (item) => ({
-            feed: feed.title!,
-            title: (await translate(item.title!))!,
-            link: item.link!,
-            description: (await translate(item.description!))!,
-            pubDate: item.pubDate!,
-          }))
+        filteredPosts.map(async (item) => ({
+          feed: feed.title!,
+          title: (await translate(item.title!))!,
+          link: item.link!,
+          description: (await translate(item.description!))!,
+          pubDate: item.pubDate!,
+        }))
       );
 
       if (newPosts.length > 0) {
@@ -67,16 +63,17 @@ export const handler = async () => {
           });
         } else {
           console.info("DRY_RUN is true. Skip notification.");
-          console.info({ ...body });
+          console.info(JSON.stringify(body));
         }
 
-        for (const post of newPosts) {
-          await putHistory({
-            title: post.title!,
-            link: post.link,
-            description: post.description,
-            publishedAt: post.pubDate,
-            notifiedAt: new Dayjs().toISOString(),
+        for await (const post of newPosts) {
+          putHistory({
+            Title: post.title!,
+            Type: feed.type,
+            Link: post.link,
+            Description: post.description,
+            PublishedAt: dayjs(post.pubDate).toISOString(),
+            NotifiedAt: dayjs().toISOString(),
           });
         }
       }

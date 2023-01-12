@@ -5,7 +5,7 @@ import { fetchHistoryByTitle } from "./history";
 
 export const isNewItem = async (options: { title: string }) => {
   const historyItems = await fetchHistoryByTitle(options.title);
-  return historyItems.length === 0;
+  return historyItems.length == 0;
 };
 
 export const isValidItem = (
