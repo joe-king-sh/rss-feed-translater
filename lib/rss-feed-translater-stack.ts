@@ -1,4 +1,4 @@
-import { Duration, Stack, StackProps } from "aws-cdk-lib";
+import { Duration, Stack, StackProps, RemovalPolicy } from "aws-cdk-lib";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
@@ -6,6 +6,8 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import { BillingMode } from "aws-cdk-lib/aws-dynamodb";
 
 export class RssFeedTranslaterStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -60,6 +62,17 @@ export class RssFeedTranslaterStack extends Stack {
           retryAttempts: 3,
         }),
       ],
+    });
+
+    new dynamodb.Table(scope, `notificationHistory`, {
+      partitionKey: {
+        name: "Title",
+        type: dynamodb.AttributeType.STRING,
+      },
+      tableName: "RSSNotificationHistory",
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      pointInTimeRecovery: false,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 }
