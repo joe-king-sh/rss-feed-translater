@@ -3,7 +3,15 @@ import * as dayjs from "dayjs";
 import * as Parser from "rss-parser";
 import { fetchHistoryByTitle } from "./history";
 
-export const isNewItem = async (options: { title: string }) => {
+export const isNewItem = async (options: {
+  title: string;
+  pubDate: dayjs.Dayjs;
+  nowDate: dayjs.Dayjs;
+}) => {
+  if (options.pubDate.isBefore(options.nowDate.subtract(1, "month"))) {
+    return false;
+  }
+
   const historyItems = await fetchHistoryByTitle(options.title);
   return historyItems.length == 0;
 };

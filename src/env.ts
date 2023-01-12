@@ -2,7 +2,6 @@ export const getEnv = () => {
   const {
     SLACK_INCOMING_WEBHOOK_URL_BLOGS,
     SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS,
-    LAST_RETREIVED_THRESHOLD_MINUTE,
     DRY_RUN,
   } = process.env;
   if (!SLACK_INCOMING_WEBHOOK_URL_BLOGS)
@@ -13,10 +12,6 @@ export const getEnv = () => {
   return {
     SLACK_INCOMING_WEBHOOK_URL_BLOGS,
     SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS,
-    LAST_RETREIVED_THRESHOLD_MINUTE:
-      LAST_RETREIVED_THRESHOLD_MINUTE !== undefined
-        ? Number(LAST_RETREIVED_THRESHOLD_MINUTE)
-        : 60,
     DRY_RUN: DRY_RUN === "true" ? true : false,
   };
 };

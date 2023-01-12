@@ -31,11 +31,6 @@ export class RssFeedTranslaterStack extends Stack {
               this,
               `/RSS_FEED_TRANSLATER/SLACK_INCOMING-WEBHOOK-URL-ANNOUNCEMENTS`
             ),
-          LAST_RETREIVED_THRESHOLD_MINUTE:
-            ssm.StringParameter.valueForStringParameter(
-              this,
-              `/RSS_FEED_TRANSLATER/LAST_RETREIVED_THRESHOLD_MINUTE`
-            ),
         },
         functionName: "RssFeedTranslater",
         description: "AWSのRSS情報を読み取り日本語化してSlackに通知する",

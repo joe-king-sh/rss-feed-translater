@@ -14,6 +14,8 @@ const parser = new Parser({
 });
 
 export const handler = async () => {
+  const nowDate = dayjs();
+
   const {
     SLACK_INCOMING_WEBHOOK_URL_BLOGS,
     SLACK_INCOMING_WEBHOOK_URL_ANNOUNCEMENTS,
@@ -31,6 +33,8 @@ export const handler = async () => {
             isValidItem(item) &&
             (await isNewItem({
               title: item.title!,
+              nowDate,
+              pubDate: dayjs(item.pubDate),
             }))
         )
       );
