@@ -6,6 +6,7 @@ import { translate } from "./lib/translate";
 import { feeds } from "./feeds";
 import { getEnv } from "./env";
 import { putHistory } from "./lib/history";
+import { CfnSolution } from "aws-cdk-lib/aws-personalize";
 
 const parser = new Parser({
   customFields: {
@@ -43,8 +44,10 @@ export const handler = async () => {
         filteredPosts.map(async (item) => ({
           feed: feed.title!,
           title: (await translate(item.title!))!,
+          rawTitle: item.title!,
           link: item.link!,
           description: (await translate(item.description!))!,
+          rawDescription: item.description!,
           pubDate: item.pubDate!,
         }))
       );
@@ -71,14 +74,15 @@ export const handler = async () => {
         }
 
         for await (const post of newPosts) {
-          putHistory({
-            Title: post.title!,
+          const item = {
+            Title: post.rawTitle!,
             Type: feed.type,
             Link: post.link,
-            Description: post.description,
+            Description: post.rawDescription,
             PublishedAt: dayjs(post.pubDate).toISOString(),
             NotifiedAt: dayjs().toISOString(),
-          });
+          };
+          putHistory(item);
         }
       }
     })
