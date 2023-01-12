@@ -1,10 +1,11 @@
 import Parser from "rss-parser";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { isNewItem, isValidItem } from "./lib/validate";
 import { buildMessageBody, notify } from "./lib/notify";
 import { translate } from "./lib/translate";
 import { feeds } from "./feeds";
 import { getEnv } from "./env";
+import { putHistory } from "./lib/history";
 
 const parser = new Parser({
   customFields: {
@@ -19,7 +20,6 @@ export const handler = async () => {
     LAST_RETREIVED_THRESHOLD_MINUTE,
     DRY_RUN,
   } = getEnv();
-  const nowDate = dayjs();
 
   await Promise.all(
     feeds.map(async (feed) => {
@@ -36,13 +36,7 @@ export const handler = async () => {
             return (
               isValidItem(item) &&
               isNewItem({
-                pubDate: dayjs(item.pubDate),
-                nowDate,
-                lastRetrievedThresholdMinute:
-                  feed.type == "announcements"
-                    ? // what's newのRSSのpubDateに過去日が挿入されてきて拾えない問題があるので閾値を広くする
-                      240
-                    : LAST_RETREIVED_THRESHOLD_MINUTE,
+                title: item.title!,
               })
             );
           })
@@ -51,6 +45,7 @@ export const handler = async () => {
             title: (await translate(item.title!))!,
             link: item.link!,
             description: (await translate(item.description!))!,
+            pubDate: item.pubDate!,
           }))
       );
 
@@ -73,6 +68,16 @@ export const handler = async () => {
         } else {
           console.info("DRY_RUN is true. Skip notification.");
           console.info({ ...body });
+        }
+
+        for (const post of newPosts) {
+          await putHistory({
+            title: post.title!,
+            link: post.link,
+            description: post.description,
+            publishedAt: post.pubDate,
+            notifiedAt: new Dayjs().toISOString(),
+          });
         }
       }
     })

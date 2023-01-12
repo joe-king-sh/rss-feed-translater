@@ -1,16 +1,11 @@
 import { Translate } from "@aws-sdk/client-translate";
 import * as dayjs from "dayjs";
 import * as Parser from "rss-parser";
+import { fetchHistoryByTitle } from "./history";
 
-export const isNewItem = (options: {
-  pubDate: dayjs.Dayjs;
-  nowDate: dayjs.Dayjs;
-  lastRetrievedThresholdMinute: number;
-}) => {
-  // 以下の閾値の範囲で更新された記事を収集する
-  return options.pubDate.isAfter(
-    options.nowDate.subtract(options.lastRetrievedThresholdMinute, "minute")
-  );
+export const isNewItem = async (options: { title: string }) => {
+  const historyItems = await fetchHistoryByTitle(options.title);
+  return historyItems.length === 0;
 };
 
 export const isValidItem = (
