@@ -59,15 +59,22 @@ export class RssFeedTranslaterStack extends Stack {
       ],
     });
 
-    new dynamodb.Table(this, `notificationHistory`, {
-      partitionKey: {
-        name: "Title",
-        type: dynamodb.AttributeType.STRING,
-      },
-      tableName: "RSSNotificationHistory",
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      pointInTimeRecovery: false,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
+    const notificationHistoryTable = new dynamodb.Table(
+      this,
+      `notificationHistory`,
+      {
+        partitionKey: {
+          name: "Title",
+          type: dynamodb.AttributeType.STRING,
+        },
+        tableName: "RSSNotificationHistory",
+        billingMode: BillingMode.PAY_PER_REQUEST,
+        pointInTimeRecovery: false,
+        removalPolicy: RemovalPolicy.DESTROY,
+      }
+    );
+
+    notificationHistoryTable.grantReadData(rssFeedTranslaterLambda);
+    notificationHistoryTable.grantWriteData(rssFeedTranslaterLambda);
   }
 }
