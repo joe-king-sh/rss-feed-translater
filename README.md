@@ -26,10 +26,18 @@ AWS から英語で提供されている RSS を Amazon Translate で日本語�
 - `/RSS_FEED_TRANSLATER/SLACK_INCOMING_WEBHOOK-URL-BLOGS`
   - AWS Blogs の通知先となる Slack の WebhookURL
 - `/RSS_FEED_TRANSLATER/SLACK_INCOMING-WEBHOOK-URL-ANNOUNCEMENTS`
-  - What's New の通知先となる Slack の WebhookURL
+  - What's New と AWS API Changes の通知先となる Slack の WebhookURL
 
 ### 2. デプロイ
 
 ```bash
 $ npx cdk deploy
+```
+
+## ローカル実行
+
+.env で DRY_RUN=true にすると翻訳、通知、履歴登録をスキップする
+
+```
+$ npx ts-node src/index.ts
 ```

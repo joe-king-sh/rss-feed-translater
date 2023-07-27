@@ -176,4 +176,9 @@ export const feeds = [
     url: "https://aws.amazon.com/about-aws/whats-new/recent/feed/",
     type: "announcements",
   },
+  {
+    title: "AWS API Changes",
+    url: "https://awsapichanges.info/feed/feed.rss",
+    type: "announcements",
+  },
 ];

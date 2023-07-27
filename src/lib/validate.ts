@@ -12,7 +12,10 @@ export const isNewItem = async (options: {
     return false;
   }
 
-  const historyItems = await fetchHistoryByTitle(options.title);
+  const historyItems = await fetchHistoryByTitle(
+    // AWS API Changesなど、重複するtitleに対応して日付もキーに含める
+    options.title + options.pubDate.toISOString()
+  );
   return historyItems.length == 0;
 };
 

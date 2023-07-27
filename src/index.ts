@@ -6,7 +6,9 @@ import { translate } from "./lib/translate";
 import { feeds } from "./feeds";
 import { getEnv } from "./env";
 import { putHistory } from "./lib/history";
-import { CfnSolution } from "aws-cdk-lib/aws-personalize";
+import { config } from "dotenv";
+
+config();
 
 const parser = new Parser({
   customFields: {
@@ -74,15 +76,22 @@ export const handler = async () => {
         }
 
         for await (const post of newPosts) {
+          const publishedAt = dayjs(post.pubDate).toISOString();
           const item = {
-            Title: post.rawTitle!,
+            Title: post.rawTitle! + publishedAt, // タイトルと公開日で一意とする
             Type: feed.type,
             Link: post.link,
             Description: post.rawDescription,
-            PublishedAt: dayjs(post.pubDate).toISOString(),
+            PublishedAt: publishedAt,
             NotifiedAt: dayjs().toISOString(),
           };
-          putHistory(item);
+          if (!DRY_RUN) {
+            console.info(item);
+            putHistory(item);
+          } else {
+            console.info(item);
+            console.info("DRY_RUN is true. Skip pushing history.");
+          }
         }
       }
     })
