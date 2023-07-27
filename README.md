@@ -5,7 +5,7 @@
 AWS から英語で提供されている RSS を Amazon Translate で日本語化して Slack へ通知します。
 
 対象の RSS は[AWS Blogs](https://aws.amazon.com/blogs/)と[What's New with AWS](https://aws.amazon.com/about-aws/whats-new/2022)です。  
-詳細は[src/feed.ts](./src/lib/feed.ts)をご確認ください
+詳細は[src/feeds.ts](./src/feeds.ts)をご確認ください
 
 ### アーキテクチャ
 
